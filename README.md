@@ -18,12 +18,13 @@ A backend API that takes user information and stores it in a database. Necessary
 ## Tech Stack
 
 **Frontend**: React.js
+
 **Backend**: Flask, SQL
 
 ## Challenges Faced
 
 - To be written
 
-## What we learned
+## What We Learned
 
 - To be written
