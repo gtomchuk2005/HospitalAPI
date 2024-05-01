@@ -20,7 +20,7 @@ def create_app():
     return app
 
 def create_database(app):
-    if not path.exists('api/instance/database.db'):
+    if not path.exists('./instance/database.db'):
         with app.app_context():
             db.create_all()
             print("Created Database!")
