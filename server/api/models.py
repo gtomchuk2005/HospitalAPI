@@ -6,7 +6,7 @@ class Patient(db.Model):
     glucose = db.Column(db.Float, nullable=True)
     blood_pressure = db.Column(db.Float, nullable=True)
     skin_thickness = db.Column(db.Float, nullable=True)
-    insulin = db.Column(db.Integer, nullable=True)
+    insulin = db.Column(db.Float, nullable=True)
     bmi = db.Column(db.Float, nullable=True)
     diabetes_pedigree_function = db.Column(db.Float, nullable=True)
     age = db.Column(db.Integer, nullable=True)
