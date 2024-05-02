@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, jsonify, request, Response
+from flask import Flask, Blueprint, jsonify, request
 import json
 from . import db
 from .models import Patient
@@ -10,9 +10,9 @@ app = Blueprint('routes', __name__)
 def get_all_patients():
     patients = []
     for patient in Patient.query.all():
-        patients.append(json.dumps(patient.to_dict(), indent=4, sort_keys=False))
-    patients = '\n'.join(patients)
-    return Response(patients, mimetype='application/json')
+        patient = patient.to_dict()
+        patients.append(patient)
+    return jsonify(patients)
 
 # GET request single patient
 @app.route("/patients/<int:id>", methods=['GET'])
@@ -20,8 +20,7 @@ def get_patient_by_id(id: int):
     patient = db.get_or_404(Patient, id)
     if patient is None:
         return jsonify({'Error': 'Patient does not exist'}), 404
-    patient = json.dumps(patient.to_dict(), indent=4, sort_keys=False)
-    return Response(patient, mimetype='application/json')
+    return jsonify(patient.to_dict())
 
 def is_valid_patient(patient):
     properties = ['id', 'pregnancies', 'glucose', 'blood_pressure', 'skin_thickness', 'insulin', 'bmi', 'diabetes_pedigree_function', 'age']
@@ -51,8 +50,7 @@ def create_patient():
 
     db.session.add(new_patient)
     db.session.commit()
-    created_patient = json.dumps(created_patient, indent=4, sort_keys=False)
-    return Response(created_patient, mimetype='application/json')
+    return jsonify(new_patient.to_dict())
 
 # PUT request
 @app.route("/patients/<int:id>", methods=['PUT'])
@@ -84,8 +82,7 @@ def update_patient(id: int):
     patient.age = age
 
     db.session.commit()
-    updated_patient = json.dumps(updated_patient, indent=4, sort_keys=False)
-    return Response(updated_patient, mimetype='application/json')
+    return jsonify(patient.to_dict())
 
 # DELETE request
 @app.route("/patients/<int:id>", methods=['DELETE'])
@@ -96,5 +93,4 @@ def delete_patient(id: int):
 
     db.session.delete(patient)
     db.session.commit()
-    patient = json.dumps(patient.to_dict(), indent=4, sort_keys=False)
-    return Response(patient, mimetype='application/json')
+    return jsonify(patient.to_dict())
