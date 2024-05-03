@@ -1,12 +1,25 @@
 from flask import Flask, Blueprint, jsonify, request
 import json
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required
 from . import db
 from .models import Patient
 
 app = Blueprint('routes', __name__)
 
+# create authorized user which generates JWT token
+@app.route("/login", methods=['POST'])
+def login():
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    if username != "test" or password != "admin":
+        return jsonify({"msg": "Bad username or password"}), 401
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token)
+
 # GET request all patients
 @app.route("/patients", methods=['GET'])
+@jwt_required()
 def get_all_patients():
     patients = []
     for patient in Patient.query.all():
@@ -16,6 +29,7 @@ def get_all_patients():
 
 # GET request single patient
 @app.route("/patients/<int:id>", methods=['GET'])
+@jwt_required()
 def get_patient_by_id(id: int):
     patient = db.get_or_404(Patient, id)
     if patient is None:
@@ -31,9 +45,9 @@ def is_valid_patient(patient):
 
 # POST request 
 @app.route("/patients", methods=['POST'])
+@jwt_required()
 def create_patient():
     created_patient = json.loads(request.data)
-    print(created_patient)
     if not is_valid_patient(created_patient):
         return jsonify({'Error': 'Invalid patient'}), 400
 
@@ -54,6 +68,7 @@ def create_patient():
 
 # PUT request
 @app.route("/patients/<int:id>", methods=['PUT'])
+@jwt_required()
 def update_patient(id: int):
     patient = db.get_or_404(Patient, id)
     if patient is None:
@@ -86,6 +101,7 @@ def update_patient(id: int):
 
 # DELETE request
 @app.route("/patients/<int:id>", methods=['DELETE'])
+@jwt_required()
 def delete_patient(id: int):
     patient = db.get_or_404(Patient, id)
     if patient is None:
