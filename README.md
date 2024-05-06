@@ -17,14 +17,17 @@ A backend API that takes user information and stores it in a database. Necessary
 
 ## Tech Stack
 
-**Frontend**: React.js
+**Backend**: Flask, SQLite
 
-**Backend**: Flask, SQL
+## Accomplishments 
+
+- Figuring out how to authorize users using JWT tokens. It required using another external package, which allows you to integrate JWT authorization with Flask.
 
 ## Challenges Faced
 
-- To be written
+- One challenge that was a particular struggle at first was setting up the HTTP routes for the API. A lot of the implementation for each request required many checks to make sure that either existing data was valid, or if creating new data matched with the database model. Each request was different in how it should be handled, so figuring out how to implement each one required time and thought.
+- Additionally, figuring out what authorization system to use took some time.
 
 ## What We Learned
 
-- To be written
+- We learned how to build a RESTful API using Python as our backend using a library called Flask, and also how to connect a SQLite database to our application, and also ensure that only those who know the proper credentials can access our API endpoints using JWT authorization.
